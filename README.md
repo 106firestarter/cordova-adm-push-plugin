@@ -8,7 +8,7 @@ This plugin is for use with [Cordova](http://incubator.apache.org/cordova/), and
 ### Contents
 
 - [LICENSE](#license)
-- [Installation](#Installation)
+- [Installation](#installation)
 
 
 
@@ -37,19 +37,25 @@ This plugin is for use with [Cordova](http://incubator.apache.org/cordova/), and
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 
+* ATTENTION: This is just a fix of the original phonegap plugin implemented by Olivier Louvignes (https://github.com/phonegap-build/PushPlugin) that became deprecated. Nevertheless, all the credits should be awarded to him.
 
-##Installation
+
+##<a name="installation"></a> Installation
 1) phonegap plugin add [plugin folder or plugin git repository]
 
 2) Add the amazon namespace to your AndroidManifest.xml
-Namespace: xmlns:amazon="http://schemas.amazon.com/apk/res/android"
+Namespace: 
+```xml
+xmlns:amazon="http://schemas.amazon.com/apk/res/android"
+```
 
 3) Update manually your application's build.gradle file and add the ADM library dependency as compileOnly. 
 
-The ADM library is automatically added to your project under the libs/ folder. Pay attention to the following tasks and complete just one.
+The ADM library is automatically added to your project under the libs/ folder. Pay attention to the following tasks and complete just one of the options accordingly to your needs/project structure.
 
-3.1) If you don't have more external libraries under the libs/ folder, then you may just comment the fileTree implementation line, as shown below:
+a) If you don't have more external libraries under the libs/ folder, then you may just comment the fileTree implementation line, as shown below:
 
+```xml
 dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
@@ -58,9 +64,10 @@ dependencies {
     compileOnly files('libs/amazon-device-messaging-1.0.1.jar')
     // SUB-PROJECT DEPENDENCIES END
 }
+```
+b) However, if you have more external libraries that require the dependency implementation through the fileTree function (implementation fileTree(dir: 'libs', include: '*.jar')), you should change the Amazon's library to another folder and update the gradle dependencies as shown below:
 
-3.2) However, if you have more external libraries that require the dependency implementation through the fileTree function (implementation fileTree(dir: 'libs', include: '*.jar')), you should change the Amazon's library to another folder and update the gradle dependencies as shown below:
-
+```xml
 dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
@@ -69,5 +76,5 @@ dependencies {
     compileOnly files('[NEWFOLDER]/amazon-device-messaging-1.0.1.jar')
     // SUB-PROJECT DEPENDENCIES END
 }
-
+```
 
