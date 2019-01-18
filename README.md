@@ -41,7 +41,11 @@ This plugin is for use with [Cordova](http://incubator.apache.org/cordova/), and
 
 
 ##<a name="installation"></a> Installation
-1) phonegap plugin add [plugin folder or plugin git repository]
+1) Install the plugin like you normally would for any phonegap project. You may install it through cordova, if so, change "phonegap" to "cordova" (you must have cordova installed).
+
+```xml
+phonegap plugin add [plugin folder or plugin git repository]
+```
 
 2) Add the amazon namespace to your AndroidManifest.xml
 Namespace: 
@@ -53,7 +57,7 @@ xmlns:amazon="http://schemas.amazon.com/apk/res/android"
 
 The ADM library is automatically added to your project under the libs/ folder. Pay attention to the following tasks and complete just one of the options accordingly to your needs/project structure.
 
-a) If you don't have more external libraries under the libs/ folder, then you may just comment the fileTree implementation line, as shown below:
+* a) If you don't have more external libraries under the libs/ folder, then you may just comment the fileTree implementation line, as shown below:
 
 ```xml
 dependencies {
@@ -65,7 +69,7 @@ dependencies {
     // SUB-PROJECT DEPENDENCIES END
 }
 ```
-b) However, if you have more external libraries that require the dependency implementation through the fileTree function (implementation fileTree(dir: 'libs', include: '*.jar')), you should change the Amazon's library to another folder and update the gradle dependencies as shown below:
+* b) However, if you have more external libraries that require the dependency implementation through the fileTree function (implementation fileTree(dir: 'libs', include: '*.jar')), you should change the Amazon's library to another folder and update the gradle dependencies as shown below:
 
 ```xml
 dependencies {
