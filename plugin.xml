@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:amazon="http://schemas.amazon.com/apk/res/android" 
+    id="com.magikbee.plugins.cordova-adm-push-plugin"
+    version="2.5.0">
+
+  <name>PushPlugin</name>
+	<author>Magikbee</author>
+
+	<description>
+		This plugin allows your application to receive push notifications on Android - Amazon FireOS
+	</description>
+
+	<license>MIT</license>
+
+	<js-module src="www/PushNotification.js" name="PushNotification">
+        <clobbers target="PushNotification" />
+	</js-module>
+
+	<engines>
+		<engine name="cordova" version=">=3.0.0" />
+	</engines>
+
+    <!-- amazon-fireos -->
+	<platform name="android">
+
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="PushPlugin" >
+				<param name="android-package" value="com.amazon.cordova.plugin.PushPlugin"/>
+			</feature>
+            <preference name="showmessageinnotification" value="true" />
+            <preference name="defaultnotificationmessage" value="You have a new message." />
+		</config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <!-- This permission ensures that no other application can intercept your ADM messages. "[YOUR PACKAGE NAME]" is your package name as defined in your <manifest> tag. -->
+            <permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" android:protectionLevel="signature" />
+            <uses-permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" />
+            <!-- This permission allows your app access to receive push notifications from ADM. -->
+            <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
+            <!-- ADM uses WAKE_LOCK to keep the processor from sleeping when a message is received. -->
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+		</config-file>
+
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <!-- You must explicitly enable ADM and declare whether your app cannot work without ADM (android:required="true") or can work without ADM (android:required="false").
+            If you specify android:required="false", your app must degrade gracefully if ADM
+            is unavailable. -->
+            <amazon:enable-feature android:name="com.amazon.device.messaging" android:required="true"/>
+			<service android:exported="false" android:name="com.amazon.cordova.plugin.ADMMessageHandler" />
+            <activity android:exported="true" android:name="com.amazon.cordova.plugin.ADMHandlerActivity" />
+            <receiver android:name="com.amazon.cordova.plugin.ADMMessageHandler$Receiver" android:permission="com.amazon.device.messaging.permission.SEND">
+                <intent-filter>
+                    <action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
+                    <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
+                    <category android:name="$PACKAGE_NAME" />
+                </intent-filter>
+            </receiver>
+            <!-- 
+            Your application's API Key 
+            TODO: PLACE THE API KEY HERE
+            -->
+            <meta-data android:name="AmazonAPIKey" android:value="eyJhbGciOiJSU0EtU0hBMjU2IiwidmVyIjoiMSJ9.eyJ2ZXIiOiIzIiwiZW5kcG9pbnRzIjp7ImF1dGh6IjoiaHR0cHM6Ly93d3cuYW1hem9uLmNvbS9hcC9vYSIsInRva2VuRXhjaGFuZ2UiOiJodHRwczovL2FwaS5hbWF6b24uY29tL2F1dGgvbzIvdG9rZW4ifSwiY2xpZW50SWQiOiJhbXpuMS5hcHBsaWNhdGlvbi1vYTItY2xpZW50LjA1YWVkMzk5ODc2MjRiYWNiNmYzYzFiZjg0MGIwODc4IiwiYXBwRmFtaWx5SWQiOiJhbXpuMS5hcHBsaWNhdGlvbi5iNjg5MDIxMTY0Yjg0OWFhYjU0NmRlMGJlN2M0NTEwZiIsImlzcyI6IkFtYXpvbiIsInR5cGUiOiJBUElLZXkiLCJwa2ciOiJjb20ucGhvbmVnYXAuaGVsbG93b3JsZCIsImFwcFZhcmlhbnRJZCI6ImFtem4xLmFwcGxpY2F0aW9uLWNsaWVudC4yN2RlNzA2ZTJkZjY0YTU5OTRiMjRiMjFkNmRhNzg4MiIsInRydXN0UG9vbCI6bnVsbCwiYXBwc2lnU2hhMjU2IjoiQTU6OUE6QjI6MkI6Mjk6MjU6QzY6QTc6REY6NkE6QkI6QkI6RUU6ODU6OUU6QTE6RUM6MTg6RTY6MUU6NEE6QUM6NzM6REM6Mzg6MUE6MjU6NDE6OTg6OTU6NDI6ODEiLCJhcHBzaWciOiI4Njo2RDoyMDozMTpCRDoxRDo5NDo4MzpBMTpGQTpGQzo5OTpGMjpCNzoyRDo5MiIsImFwcElkIjoiYW16bjEuYXBwbGljYXRpb24tY2xpZW50LjI3ZGU3MDZlMmRmNjRhNTk5NGIyNGIyMWQ2ZGE3ODgyIiwiaWQiOiJiZjkxMGFhMS0xYjA5LTExZTktODNmNy1jYjBlZTVkODVhMmUiLCJpYXQiOiIxNTQ3ODA2NDI5NDE5In0=.ZnQLMEoSM9QNdadZhmhRxTD/B8mQe9i75bUz2Xh5bsVLtDupJJCKJWQjSg/KkS9BJaTEQAdxw6Ql37dNZrNQP2/Khstgl0v6/DiCDsCL5pO92AtycpMzIZuSRa2PPY4iGLhEoCsZGESOngDCZC2zBSwZDwCENqXMgTia1JZLLpQM48p4DziwBaeVFjMVmdq5EXi1hSiGj8ZwfKrhj5fFDqMqrILMEaTOXQAzeDQXQj6KpI/X0pEQjA7UUyyJj4GjZ2v4PpuaYYYu2TqZjMtHlCZsdOdQs8LCaikhGsFXHcEVSi3I3U+tnmG3cm4IRfX8yHZpvFTdPWgEsMwsc0INJA=="/>
+        </config-file>
+        
+        <lib-file    src="ext-libs/amazon-device-messaging-1.0.1.jar" />
+        <source-file src="src/android/PushPlugin.java"                  target-dir="src/com/android/cordova/plugin" />
+        <source-file src="src/android/ADMMessageHandler.java"           target-dir="src/com/android/cordova/plugin" />
+        <source-file src="src/android/ADMHandlerActivity.java"          target-dir="src/com/android/cordova/plugin" />
+
+	</platform>
+
+</plugin>
