@@ -33,6 +33,12 @@ import android.app.Notification.Builder;
 import com.amazon.device.messaging.ADMMessageHandlerBase;
 import com.amazon.device.messaging.ADMMessageReceiver;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import java.io.IOException;
+import java.net.URL;
+import android.net.Uri;
+
 /**
  * The ADMMessageHandler class receives messages sent by ADM via the receiver.
  */
@@ -134,7 +140,7 @@ public class ADMMessageHandler extends ADMMessageHandlerBase {
 
         // Extract the payload from the message
         Bundle extras = intent.getExtras();
-        if (extras != null && (extras.getString(PushPlugin.MESSAGE) != null)) {
+        if (extras != null && (extras.getString(PushPlugin.MESSAGE) != null || extras.getString(PushPlugin.PINPOINT_TITLE) != null)) {
             // if we are in the foreground, just surface the payload, else post
             // it to the statusbar
             if (PushPlugin.isInForeground()) {
@@ -163,7 +169,6 @@ public class ADMMessageHandler extends ADMMessageHandlerBase {
             // PINPOINT'S NOTIFICATIONS
             String message = extras.getString(PushPlugin.PINPOINT_BODY);
             String title   = extras.getString(PushPlugin.PINPOINT_TITLE);
-
             // reuse the intent so that we can combine multiple messages into extra
             if (notificationIntent == null)
             {
@@ -181,7 +186,7 @@ public class ADMMessageHandler extends ADMMessageHandlerBase {
                     .setWhen(System.currentTimeMillis());
 
             // check whether the push has an image or not
-            if(PushPlugin.PINPOINT_IMAGE != null)
+            if(extras.getString(PushPlugin.PINPOINT_IMAGE)!= null)
             {
                 try
                 {
@@ -197,12 +202,12 @@ public class ADMMessageHandler extends ADMMessageHandlerBase {
                 }
             }
 
-            // check if there's a new icon for the push notification
-            if(PushPlugin.PINPOINT_IMAGE_ICON != null)
+            // check if there's a new large icon for the push notification
+            if(extras.getString(PushPlugin.PINPOINT_IMAGE_ICON) != null)
             {
                 try
                 {
-                    URL url = new URL("" + extras.getString(com.amazon.cordova.plugin.PushPlugin.PINPOINT_IMAGE));
+                    URL url = new URL("" + extras.getString(PushPlugin.PINPOINT_IMAGE_ICON));
 
                     Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
@@ -219,7 +224,7 @@ public class ADMMessageHandler extends ADMMessageHandlerBase {
             {
                 Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
 
-                notificationIntent.setData(Uri.parse("http://www.google.com"));
+                notificationIntent.setData(Uri.parse(extras.getString(PushPlugin.PINPOINT_URL)));
 
                 PendingIntent pi = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
