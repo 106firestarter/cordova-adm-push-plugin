@@ -41,39 +41,50 @@ public class PushPlugin extends CordovaPlugin {
      * @uml.property name="adm"
      * @uml.associationEnd
      */
-    private ADM adm = null;
+    private ADM adm                                             = null;
     /**
      * @uml.property name="activity"
      * @uml.associationEnd
      */
-    private Activity activity = null;
-    private static CordovaWebView webview = null;
+    private Activity activity                                   = null;
+    private static CordovaWebView webview                       = null;
     private static String notificationHandlerCallBack;
-    private static boolean isForeground = false;
-    private static Bundle gCachedExtras = null;
+    private static boolean isForeground                         = false;
+    private static Bundle gCachedExtras                         = null;
    
     
-    public static final String REGISTER = "register";
-    public static final String UNREGISTER = "unregister";
-    public static final String REGISTER_EVENT = "registered";
-    public static final String UNREGISTER_EVENT = "unregistered";
-    public static final String MESSAGE = "message";
-    public static final String ECB = "ecb";
-    public static final String EVENT = "event";
-    public static final String PAYLOAD = "payload";
-    public static final String FOREGROUND = "foreground";
-    public static final String REG_ID = "regid";
-    public static final String COLDSTART = "coldstart";
+    public static final String REGISTER                         = "register";
+    public static final String UNREGISTER                       = "unregister";
+    public static final String REGISTER_EVENT                   = "registered";
+    public static final String UNREGISTER_EVENT                 = "unregistered";
+    public static final String MESSAGE                          = "message";
+    public static final String ECB                              = "ecb";
+    public static final String EVENT                            = "event";
+    public static final String PAYLOAD                          = "payload";
+    public static final String FOREGROUND                       = "foreground";
+    public static final String REG_ID                           = "regid";
+    public static final String COLDSTART                        = "coldstart";
 
-    private static final String NON_AMAZON_DEVICE_ERROR = "PushNotifications using Amazon Device Messaging is only supported on Kindle Fire devices (2nd Generation and Later only).";
-    private static final String ADM_NOT_SUPPORTED_ERROR = "Amazon Device Messaging is not supported on this device.";
-    private static final String REGISTER_OPTIONS_NULL = "Register options are not specified.";
-    private static final String ECB_NOT_SPECIFIED = "ecb(eventcallback) option is not specified in register().";
-    private static final String ECB_NAME_NOT_SPECIFIED = "ecb(eventcallback) value is missing in options for register().";
-    private static final String REGISTRATION_SUCCESS_RESPONSE = "Registration started...";
+    public static final String PINPOINT_ACTION                  = "pinpoint.openApp";
+    public static final String PINPOINT_TITLE                   = "pinpoint.notification.title";
+    public static final String PINPOINT_BODY                    = "pinpoint.notification.body";
+    public static final String PINPOINT_CAMPAIGN_ID             = "pinpoint.campaign.campaign_id";
+    public static final String PINPOINT_TYPE                    = "pinpoint.notification.silentPush";
+    public static final String PINPOINT_MD5                     = "adm_message_md5";
+    public static final String PINPOINT_IMAGE                   = "pinpoint.notification.imageUrl";
+    public static final String PINPOINT_URL                     = "pinpoint.url";
+    public static final String PINPOINT_DEEPLINK                = "pinpoint.deeplink";
+    public static final String PINPOINT_IMAGE_ICON              = "pinpoint.notification.imageIconUrl";
+
+    private static final String NON_AMAZON_DEVICE_ERROR         = "PushNotifications using Amazon Device Messaging is only supported on Kindle Fire devices (2nd Generation and Later only).";
+    private static final String ADM_NOT_SUPPORTED_ERROR         = "Amazon Device Messaging is not supported on this device.";
+    private static final String REGISTER_OPTIONS_NULL           = "Register options are not specified.";
+    private static final String ECB_NOT_SPECIFIED               = "ecb(eventcallback) option is not specified in register().";
+    private static final String ECB_NAME_NOT_SPECIFIED          = "ecb(eventcallback) value is missing in options for register().";
+    private static final String REGISTRATION_SUCCESS_RESPONSE   = "Registration started...";
     private static final String UNREGISTRATION_SUCCESS_RESPONSE = "Unregistration started...";
     
-    private static final String MODEL_FIRST_GEN = "Kindle Fire";
+    private static final String MODEL_FIRST_GEN                 = "Kindle Fire";
 
     public enum ADMReadiness {
         INITIALIZED, NON_AMAZON_DEVICE, ADM_NOT_SUPPORTED

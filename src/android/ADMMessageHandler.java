@@ -153,40 +153,143 @@ public class ADMMessageHandler extends ADMMessageHandlerBase {
      * 
      * @param context
      * @param extras
-     */
+     */   
     public void createNotification(Context context, Bundle extras) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String appName = getAppName(this);
 
-        // reuse the intent so that we can combine multiple messages into extra
-        if (notificationIntent == null) {
-            notificationIntent = new Intent(this, ADMHandlerActivity.class);
+        if(extras.getString(PushPlugin.PINPOINT_BODY) != null)
+        {
+            // PINPOINT'S NOTIFICATIONS
+            String message = extras.getString(PushPlugin.PINPOINT_BODY);
+            String title   = extras.getString(PushPlugin.PINPOINT_TITLE);
+
+            // reuse the intent so that we can combine multiple messages into extra
+            if (notificationIntent == null)
+            {
+                notificationIntent = new Intent(this, com.amazon.cordova.plugin.ADMHandlerActivity.class);
+            }
+
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            notificationIntent.putExtra("pushBundle", extras);
+
+            final Builder notificationBuilder = new Notification.Builder(context);
+
+            // Standard Notification Configurations
+            notificationBuilder
+                    .setSmallIcon(context.getApplicationInfo().icon)
+                    .setWhen(System.currentTimeMillis());
+
+            // check whether the push has an image or not
+            if(PushPlugin.PINPOINT_IMAGE != null)
+            {
+                try
+                {
+                    URL url = new URL("" + extras.getString(com.amazon.cordova.plugin.PushPlugin.PINPOINT_IMAGE));
+
+                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                    notificationBuilder.setStyle(new Notification.BigPictureStyle().bigPicture(image));
+                }
+                catch(IOException e)
+                {
+                    System.out.println(e);
+                }
+            }
+
+            // check if there's a new icon for the push notification
+            if(PushPlugin.PINPOINT_IMAGE_ICON != null)
+            {
+                try
+                {
+                    URL url = new URL("" + extras.getString(com.amazon.cordova.plugin.PushPlugin.PINPOINT_IMAGE));
+
+                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                    notificationBuilder.setLargeIcon(image);
+                }
+                catch(IOException e)
+                {
+                    System.out.println(e);
+                }
+            }
+
+            // check if the notification has a link
+            if(extras.getString(PushPlugin.PINPOINT_URL) != null)
+            {
+                Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
+
+                notificationIntent.setData(Uri.parse("http://www.google.com"));
+
+                PendingIntent pi = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+
+                notificationBuilder.setContentIntent(pi);
+            }
+            else if (extras.getString(PushPlugin.PINPOINT_DEEPLINK) != null)
+            {
+                // DeepLinked Notification
+                // TODO : Implement the deep linkage
+            }
+            else
+            {
+                // Regular Notification
+                PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                        notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                notificationBuilder.setContentIntent(contentIntent);
+            }
+
+            // Configure the text and title that show up in the notification bar
+            if (this.shouldShowMessageInNotification())
+            {
+                notificationBuilder.setContentTitle(Html.fromHtml(title).toString());
+                notificationBuilder.setContentText(Html.fromHtml(message).toString());
+            }
+            else
+            {
+                notificationBuilder.setContentText(this.defaultMessageTextInNotification());
+            }
+
+            notificationBuilder.setTicker(title);
+            notificationBuilder.setAutoCancel(true);
+
+            // Because the ID remains unchanged, the existing notification is updated.
+            notificationManager.notify((String) appName, NOTIFICATION_ID,
+                    notificationBuilder.getNotification());
         }
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
-            | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        notificationIntent.putExtra("pushBundle", extras);
+        else
+        {
+            // NORMAL NOTIFICATIONS
+            // reuse the intent so that we can combine multiple messages into extra
+            if (notificationIntent == null) {
+                notificationIntent = new Intent(this, ADMHandlerActivity.class);
+            }
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            notificationIntent.putExtra("pushBundle", extras);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-            notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                    notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        final Builder notificationBuilder = new Notification.Builder(context);
-        notificationBuilder.setSmallIcon(context.getApplicationInfo().icon)
-            .setWhen(System.currentTimeMillis())
-            .setContentIntent(contentIntent);
+            final Builder notificationBuilder = new Notification.Builder(context);
+            notificationBuilder.setSmallIcon(context.getApplicationInfo().icon)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentIntent(contentIntent);
 
-        if (this.shouldShowMessageInNotification()) {
-            String message = extras.getString(PushPlugin.MESSAGE);
-            notificationBuilder.setContentText(Html.fromHtml(message).toString());
-        } else {
-            notificationBuilder.setContentText(this.defaultMessageTextInNotification());
+            if (this.shouldShowMessageInNotification()) {
+                String message = extras.getString(PushPlugin.MESSAGE);
+                notificationBuilder.setContentText(Html.fromHtml(message).toString());
+            } else {
+                notificationBuilder.setContentText(this.defaultMessageTextInNotification());
+            }
+
+            String title = appName;
+            notificationBuilder.setContentTitle(title).setTicker(title);
+            notificationBuilder.setAutoCancel(true);
+            // Because the ID remains unchanged, the existing notification is updated.
+            notificationManager.notify((String) appName, NOTIFICATION_ID,
+                    notificationBuilder.getNotification());
         }
-
-        String title = appName;
-        notificationBuilder.setContentTitle(title).setTicker(title);
-        notificationBuilder.setAutoCancel(true);
-        // Because the ID remains unchanged, the existing notification is updated.
-        notificationManager.notify((String) appName, NOTIFICATION_ID,
-            notificationBuilder.getNotification());
     }
 
     public static void cancelNotification(Context context) {

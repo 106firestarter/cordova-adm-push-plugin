@@ -10,9 +10,7 @@ This plugin is for use with [Cordova](http://incubator.apache.org/cordova/), and
 - [LICENSE](#license)
 - [Installation](#installation)
 
-
-
-##<a name="license"></a> LICENSE
+## <a name="license"></a> LICENSE
 
 	The MIT License
 
@@ -39,8 +37,7 @@ This plugin is for use with [Cordova](http://incubator.apache.org/cordova/), and
 
 * ATTENTION: This is just a fix of the original phonegap plugin implemented by Olivier Louvignes (https://github.com/phonegap-build/PushPlugin) that became deprecated. Nevertheless, all the credits should be awarded to him.
 
-
-##<a name="installation"></a> Installation
+## <a name="installation"></a> Installation
 1) Install the plugin like you normally would for any phonegap project. You may install it through cordova, if so, change "phonegap" to "cordova" (you must have cordova installed).
 
 ```xml
@@ -53,15 +50,15 @@ Namespace:
 xmlns:amazon="http://schemas.amazon.com/apk/res/android"
 ```
 
-3) Update manually your application's build.gradle file and add the ADM library dependency as compileOnly. 
+3) In case the build.gradle file did not get updated with the latest dependencies, please, manually update your application's build.gradle file and add the ADM library dependency as compileOnly. 
 
 The ADM library is automatically added to your project under the libs/ folder. Pay attention to the following tasks and complete just one of the options accordingly to your needs/project structure.
 
-* a) If you don't have more external libraries under the libs/ folder, then you may just comment the fileTree implementation line, as shown below:
+* A) If you don't have more external libraries under the libs/ folder, then you may just comment the fileTree implementation line and add the compileOnly dependency for the ADM messaging service, as shown below:
 
 ```xml
 dependencies {
-    implementation fileTree(dir: 'libs', include: '*.jar')
+    //implementation fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: ":CordovaLib"))
     compile "com.android.support:support-v4:24.1.1+"
@@ -69,7 +66,7 @@ dependencies {
     // SUB-PROJECT DEPENDENCIES END
 }
 ```
-* b) However, if you have more external libraries that require the dependency implementation through the fileTree function (implementation fileTree(dir: 'libs', include: '*.jar')), you should change the Amazon's library to another folder and update the gradle dependencies as shown below:
+* B) However, if you have more external libraries that require the dependency implementation through the fileTree function (implementation fileTree(dir: 'libs', include: '*.jar')), you should change the Amazon's library to another folder and update the gradle dependencies as shown below:
 
 ```xml
 dependencies {
