@@ -68,7 +68,7 @@
         <source-file src="src/android/PushPlugin.java"                  target-dir="src/com/android/cordova/plugin" />
         <source-file src="src/android/ADMMessageHandler.java"           target-dir="src/com/android/cordova/plugin" />
         <source-file src="src/android/ADMHandlerActivity.java"          target-dir="src/com/android/cordova/plugin" />
-        <framework src="build.gradle" custom="true" type="gradleReference" />
+        <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
 
 	</platform>
 
