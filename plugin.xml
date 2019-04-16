@@ -22,6 +22,7 @@
 		<engine name="cordova" version=">=3.0.0" />
 	</engines>
 
+    <preference name="android-build-tool" value="gradle" />
     <!-- amazon-fireos -->
 	<platform name="android">
 
@@ -68,7 +69,7 @@
         <source-file src="src/android/PushPlugin.java"                  target-dir="src/com/android/cordova/plugin" />
         <source-file src="src/android/ADMMessageHandler.java"           target-dir="src/com/android/cordova/plugin" />
         <source-file src="src/android/ADMHandlerActivity.java"          target-dir="src/com/android/cordova/plugin" />
-        <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
+        <framework   src="src/android/build.gradle"                     custom="true" type="gradleReference" />
 
 	</platform>
 
