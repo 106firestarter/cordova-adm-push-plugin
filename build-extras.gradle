@@ -5,6 +5,12 @@ android {
             dirs 'libs'
         }
     }
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 22
+    }
+
     packagingOptions {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
