@@ -1,4 +1,10 @@
 android {
+    repositories{    
+        jcenter()
+        flatDir {
+            dirs 'libs'
+        }
+    }
    packagingOptions {
        exclude 'META-INF/NOTICE'
        exclude 'META-INF/LICENSE'
