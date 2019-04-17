@@ -1,8 +1,8 @@
 dependencies {
-    api fileTree(dir: 'libs', include: '*.jar')
+    // implementation fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: ":CordovaLib"))
     compile "com.android.support:support-v4:24.1.1+"
-    compileOnly files('libs/amazon-device-messaging-1.0.1.jar')
+    compileOnly files('ext-libs/amazon-device-messaging-1.0.1.jar')
     // SUB-PROJECT DEPENDENCIES END
 }
