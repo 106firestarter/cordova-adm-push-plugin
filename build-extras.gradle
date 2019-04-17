@@ -1,7 +1,7 @@
 android {
     repositories{
         flatDir {
-            dirs 'libs'
+            dirs '$projectDir/ext-libs'
         }
     }
 
@@ -16,11 +16,11 @@ android {
     }
 
     dependencies {
-        implementation fileTree(dir: 'ext-libs', include: '*.jar')
+        // implementation fileTree(dir: 'ext-libs', include: '*.jar')
         // SUB-PROJECT DEPENDENCIES START
-        implementation(project(path: ":CordovaLib"))
-        compile "com.android.support:support-v4:24.1.1+"
-        provided files('libs/amazon-device-messaging-1.0.1.jar')
+        // implementation(project(path: ":CordovaLib"))
+        // compile "com.android.support:support-v4:24.1.1+"
+        provided files('$projectDir/ext-libs/amazon-device-messaging-1.0.1.jar')
         // SUB-PROJECT DEPENDENCIES END
-    }
+    }    
 }
