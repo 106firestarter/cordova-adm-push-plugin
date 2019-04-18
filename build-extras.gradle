@@ -16,6 +16,6 @@ android {
     }
 
     dependencies {
-        compileOnly files('ext-libs/amazon-device-messaging-1.0.1.jar')
+        compile files('ext-libs/amazon-device-messaging-1.0.1.jar')
     }    
 }
